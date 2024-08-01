@@ -84,7 +84,106 @@ return {
 		end,
 		dependencies = { 'nvim-tree/nvim-web-devicons' }
 	},
+	{
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+			config = function () 
+			  local configs = require("nvim-treesitter.configs")
+
+			  configs.setup({
+				  ensure_installed = { "c_sharp", "lua", "javascript", "html" },
+				  sync_install = false,
+				  highlight = { enable = true },
+				  indent = { enable = true },  
+				})
+			end,
+	},
+	{
+	  "folke/which-key.nvim",
+	  event = "VeryLazy",
+	  opts = {
+		plugins = {
+			registers = true	
+		}
+	  },
+	  keys = {
+	    {
+	      "<leader>f",
+	      function()
+			require("which-key").show({ global = false })
+	      end,
+	      desc = "Telescope",
+	    },
+	    {
+	      "<leader>g",
+	      function()
+			require("which-key").show({ global = false })
+	      end,
+	      desc = "Git",
+	    },
+	  },
+	},
+	{
+    	'nvim-telescope/telescope.nvim', tag = '0.1.8', -- or branch = '0.1.x',
+		lazy = true,
+      	dependencies = { 'nvim-lua/plenary.nvim' }
+    },
     {
         "APZelos/blamer.nvim",
     },
+	{
+		"williamboman/mason.nvim",
+	},
+	{
+		"williamboman/mason-lspconfig.nvim",
+	},
+	{
+		"neovim/nvim-lspconfig",
+	},
+	{
+		"hrsh7th/nvim-cmp"
+	},
+	{
+		"hrsh7th/cmp-nvim-lsp"
+	},
+	{
+		"L3MON4D3/LuaSnip"
+	},
+	{
+		'windwp/nvim-autopairs',
+		event = "InsertEnter",
+		config = true
+	},
+	{
+		"norcalli/nvim-colorizer.lua",
+		config = function()
+			require('colorizer').setup({
+				'*';
+			})
+		end
+	},
+	{
+		"SmiteshP/nvim-navic",
+      	dependencies = { "neovim/nvim-lspconfig" },
+		config = function()
+			local icons = require("config.icons")
+			require("nvim-navic").setup({
+				icons = icons.kind,
+				lsp = {
+					auto_attach = true,
+					preference = nil
+				},
+				highlight = false,
+				separator = " > ",
+				depth_limit = 0,
+				depth_limit_indicator = "..",
+				safe_output = true,
+				lazy_update_context = false,
+				click = false,
+				format_text = function(text)
+					return text
+				end,
+		})
+		end
+	}
 }

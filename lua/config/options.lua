@@ -1,7 +1,11 @@
 vim.cmd.colorscheme = "catppuccin"
 
 local o = vim.opt
+o.statusline = "%{%v:lua.require'nvim-navic'.get_location()%}"
+o.laststatus = 2
+o.cmdheight = 0
 
+o.smarttab = true
 o.number = true
 o.relativenumber = true
 o.mouse = 'a'
@@ -23,4 +27,10 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
+
+-- BLAMER
+vim.g.blamer_enabled = 1
+vim.g.blamer_delay = 1000
+vim.g.blamer_prefix = ' '
+vim.g.blamer_format = ' %committer | %committer-time | %summary'
 
