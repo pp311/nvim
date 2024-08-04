@@ -1,12 +1,15 @@
 -- https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 local navic = require("nvim-navic")
+local lspconfig = require('lspconfig')
 
 local default_setup = function(server)
-  require('lspconfig')[server].setup({
+  lspconfig[server].setup({
     capabilities = lsp_capabilities,
 	 on_attach = function(client, bufnr)
-        navic.attach(client, bufnr)
+		if client.server_capabilities.documentSymbolProvider then
+			navic.attach(client, bufnr)
+		end
     end
   })
 end
@@ -113,19 +116,36 @@ cmp.setup({
     },
 })
 
--- CUSTOM CONFIG
-require('mason-lspconfig').setup({
-  ensure_installed = {},
-  handlers = {
-    default_setup,
-    lua_ls = function()
-      require('lspconfig').lua_ls.setup({
-        capabilities = lsp_capabilities,
-        ---
-        -- This is where you place
-        -- your custom config
-        ---
-      })
-    end,
+-- Add border to lsp window
+vim.diagnostic.config({
+  float = {
+    border = 'rounded',
   },
 })
+
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+  vim.lsp.handlers.hover,
+  {border = 'rounded'}
+)
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+  vim.lsp.handlers.signature_help,
+  {border = 'rounded'}
+)
+
+-- CUSTOM CONFIG
+-- require('mason-lspconfig').setup({
+--   ensure_installed = {},
+--   handlers = {
+--     default_setup,
+--     lua_ls = function()
+--       lspconfig.lua_ls.setup({
+--         capabilities = lsp_capabilities,
+--         ---
+--         -- This is where you place
+--         -- your custom config
+--         ---
+--       })
+--     end,
+--   },
+-- })

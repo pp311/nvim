@@ -1,9 +1,10 @@
 vim.cmd.colorscheme = "catppuccin"
 
 local o = vim.opt
-o.statusline = "%{%v:lua.require'nvim-navic'.get_location()%}"
-o.laststatus = 2
-o.cmdheight = 0
+-- o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
+-- o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
+-- o.laststatus = 2
+o.cmdheight = 1
 
 o.smarttab = true
 o.number = true
@@ -22,6 +23,7 @@ o.pumheight = 10
 o.hlsearch = true
 o.guifont = "Liga SFMono Nerd Font:h12"
 o.hidden = true
+-- o.swapfile = false
 
 vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
