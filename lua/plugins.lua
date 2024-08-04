@@ -248,9 +248,9 @@ return {
 		version = "*",
 		lazy = true,
 		event = "User FileOpened",
-		dependencies = 'nvim-tree/nvim-web-devicons'
+		dependencies = 'nvim-tree/nvim-web-devicons',
+		config = function()
+			require('bufferline').setup()
+		end
 	},
-	config = function()
-		require('bufferline').setup()
-	end
 }
