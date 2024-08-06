@@ -82,6 +82,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
 	end
 })
 
+-- Terminal
+vim.cmd("FloatermNew --name=floaterm1")
+vim.cmd("FloatermNew --name=floaterm2 --height=0.4 --width=0.4 --wintype=split --position=botright")
+vim.cmd("FloatermNew --name=floaterm3 --height=1 --width=0.4 --wintype=vsplit --position=botright")
+vim.cmd("FloatermHide!")
+vim.cmd("stopinsert")
+k.set({'n', 't'}, '<A-1>', '<cmd>FloatermToggle floaterm1<cr>', {desc = "Open center terminal"})
+k.set({'n', 't'}, '<A-2>', '<cmd>FloatermToggle floaterm2<cr>', {desc = "Open center terminal"})
+k.set({'n', 't'}, '<A-3>', '<cmd>FloatermToggle floaterm3<cr>', {desc = "Open center terminal"})
+
 -- vim.keymap.set('n', '<C-c>', '"+yi')
 k.set('v', '<C-c>', '"+yi')
 -- vim.keymap.set('n', '<C-x>', '"+c')

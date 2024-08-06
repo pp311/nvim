@@ -16,7 +16,7 @@ return {
 				transparent_background = true,
 				no_italic = true,
 				flavor = "mocha"
-			})
+	})
 			vim.cmd.colorscheme("catppuccin")
 		end,
 	},
@@ -172,6 +172,8 @@ return {
 	},
 	{
 		"APZelos/blamer.nvim",
+		lazy = true,
+		event = "User FileOpened",
 	},
 	{
 		"williamboman/mason.nvim",
@@ -195,7 +197,8 @@ return {
 	},
 	{
 		"L3MON4D3/LuaSnip",
-		event = "InsertEnter"
+		event = "InsertEnter",
+		lazy = true
 	},
 	{
 		'windwp/nvim-autopairs',
@@ -204,6 +207,8 @@ return {
 	},
 	{
 		"norcalli/nvim-colorizer.lua",
+		lazy = true,
+		event = "User FileOpened",
 		config = function()
 			require('colorizer').setup({
 				'*',
@@ -213,6 +218,7 @@ return {
 	{
 		"SmiteshP/nvim-navic",
 		dependencies = { "neovim/nvim-lspconfig" },
+		lazy = true,
 		event = "User FileOpened",
 		config = function()
 			local icons = require("config.icons")
@@ -238,7 +244,7 @@ return {
 	{
 		"lewis6991/gitsigns.nvim",
 		event = "User FileOpened",
-		lazy = true,
+		lazy = false,
 		config = function()
 			require('gitsigns').setup()
 		end
@@ -246,11 +252,32 @@ return {
 	{
 		'akinsho/bufferline.nvim',
 		version = "*",
-		lazy = true,
+		lazy = false,
 		event = "User FileOpened",
 		dependencies = 'nvim-tree/nvim-web-devicons',
 		config = function()
 			require('bufferline').setup()
 		end
 	},
+	{
+		"rcarriga/nvim-notify",
+		config = function()
+			require("notify").setup {
+				stages = 'fade_in_slide_out',
+				background_colour = 'FloatShadow',
+				timeout = 3000,
+				icons = {
+					ERROR = "",
+					WARN = "",
+					INFO = "",
+					DEBUG = "",
+					TRACE = "✎",
+				},
+			}
+			vim.notify = require('notify')
+		end
+	},
+	{
+		"voldikss/vim-floaterm"
+	}
 }
