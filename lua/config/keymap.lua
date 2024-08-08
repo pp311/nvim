@@ -5,7 +5,8 @@ k.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 k.set("n", "<leader>e", ":vsplit<CR><C-w>w<CMD>Oil<CR>", { desc = "File explorer" })
 
 k.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
-k.set({ "n" }, "<leader>q", "<cmd>q<cr><esc>", { desc = "Quit" })
+k.set({ "n" }, "<leader>q", "<cmd>bd<cr><esc>", { desc = "Quit" })
+-- k.set({ "n" }, "<leader>q", "<cmd>q<cr><esc>", { desc = "Quit" })
 
 k.set('n', '<leader>h', '<cmd>noh<cr>', { desc = "No highlight" })
 

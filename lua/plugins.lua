@@ -5,6 +5,20 @@ return {
 		-- Optional dependencies
 		-- dependencies = { { "echasnovski/mini.icons", opts = {} } },
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			require("oil").setup({
+				columns = {
+					"icon",
+					"permissions",
+					"size",
+					"mtime",
+				},
+				buf_options = {
+					buflisted = false,
+					bufhidden = "hide",
+				},
+			})
+		end
 	},
 	{
 		"catppuccin/nvim",
@@ -16,7 +30,7 @@ return {
 				transparent_background = true,
 				no_italic = true,
 				flavor = "mocha"
-	})
+			})
 			vim.cmd.colorscheme("catppuccin")
 		end,
 	},
@@ -253,7 +267,6 @@ return {
 		'akinsho/bufferline.nvim',
 		version = "*",
 		lazy = false,
-		event = "User FileOpened",
 		dependencies = 'nvim-tree/nvim-web-devicons',
 		config = function()
 			require('bufferline').setup()
