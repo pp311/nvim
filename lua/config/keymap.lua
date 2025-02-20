@@ -1,8 +1,8 @@
 local k = vim.keymap
 local builtin = require("telescope.builtin")
 
-k.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-k.set("n", "<leader>e", ":vsplit<CR><C-w>w<CMD>Oil<CR>", { desc = "File explorer" })
+-- k.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+-- k.set("n", "<leader>e", ":vsplit<CR><C-w>w<CMD>Oil<CR>", { desc = "File explorer" })
 
 k.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 k.set({ "n" }, "<leader>q", "<cmd>bd<cr><esc>", { desc = "Quit" })
@@ -28,22 +28,21 @@ k.set('n', '<leader>gs', builtin.git_stash, { desc = "Stash" })
 -- window, buffer, tab
 k.set("n", "<leader>th", ":split<CR><C-w>w", { desc = "Horizontal split" })
 k.set("n", "<leader>tv", ":vsplit<CR><C-w>w", { desc = "Vertical split" })
-k.set("n", "<leader>tt", [[<cmd>tabnew<cr>]], { desc = "New tab" })
-k.set("n", "<leader>tc", [[<cmd>tabclose<cr>]], { desc = "Close tab" })
-k.set("n", "<leader>tn", [[<cmd>tabnext<cr>]], { desc = "Next tab" })
-k.set("n", "<leader>tb", [[<cmd>tabprevious<cr>]], { desc = "Previous tab" })
-k.set("n", "<leader>te", "<cmd>tabnew<cr><cmd>Oil<cr>", { desc = "File explorer in new tab" })
-k.set("n", "<leader>to", "<cmd>tabo<cr>", { desc = "Close all other tabs" })
+k.set("n", "<leader>tc", [[<cmd>bd<cr>]], { desc = "Close buffer" })
+k.set("n", "<leader>tn", [[<cmd>bnext<cr>]], { desc = "Next buffer" })
+k.set("n", "<leader>tb", [[<cmd>bprev<cr>]], { desc = "Previous buffer" })
+k.set("n", "<leader>to", "<cmd>bufdo bd<cr>", { desc = "Close all other buffers" })
 
 k.set("n", "th", ":split<CR><C-w>w", { desc = "Horizontal split" })
 k.set("n", "tv", ":vsplit<CR><C-w>w", { desc = "Vertical split" })
 k.set("n", "tt", [[<cmd>tabnew<cr>]], { desc = "New tab" })
-k.set("n", "tc", [[<cmd>tabclose<cr>]], { desc = "Close tab" })
-k.set("n", "tn", [[<cmd>tabnext<cr>]], { desc = "Next tab" })
-k.set("n", "tb", [[<cmd>tabprevious<cr>]], { desc = "Previous tab" })
+k.set("n", "tc", [[<cmd>bd<cr>]], { desc = "Close tab" })
+k.set("n", "tn", [[<cmd>bnext<cr>]], { desc = "Next tab" })
+k.set("n", "tb", [[<cmd>bprev<cr>]], { desc = "Previous tab" })
 k.set("n", "te", "<cmd>tabnew<cr><cmd>Oil<cr>", { desc = "File explorer in new tab" })
-k.set("n", "to", "<cmd>tabo<cr>", { desc = "Close all other tabs" })
+k.set("n", "to", "<cmd>bufdo bd<cr>", { desc = "Close all other tabs" })
 
+-- Movement
 k.set("n", "<C-l>", "<C-w>l", { desc = "Go to the right split" })
 k.set("n", "<C-h>", "<C-w>h", { desc = "Go to the left split" })
 k.set("n", "<C-j>", "<C-w>j", { desc = "Go to the down split" })
@@ -61,26 +60,24 @@ k.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
 k.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
 
 --#code
---
-
+k.set('n', '<leader>cp', '<cmd>Copilot panel<cr>', { desc = "Open Copilot panel" })
 
 
 vim.api.nvim_create_autocmd('LspAttach', {
-	desc = 'LSP actions',
-	callback = function(event)
-		k.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { buffer = event.buf, desc = "Document" })
-		k.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', { buffer = event.buf, desc = "Definition" })
-		k.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', { buffer = event.buf, desc = "Declaration" })
-		k.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { buffer = event.buf, desc = "Implementation" })
-		k.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', { buffer = event.buf, desc = "Type definition" })
-		k.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', { buffer = event.buf, desc = "References" })
-		k.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { buffer = event.buf, desc = "Hover" })
-		--
-		k.set('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>', { buffer = event.buf, desc = "Rename" })
-		k.set({ 'n', 'x' }, '<leader>cf', '<cmd>lua vim.lsp.buf.format({async = true})<cr>',
-			{ buffer = event.buf, desc = "Format" })
-		k.set('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', { buffer = event.buf, desc = "Action" })
-	end
+    desc = 'LSP actions',
+    callback = function(event)
+        k.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { buffer = event.buf, desc = "Document" })
+        k.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', { buffer = event.buf, desc = "Definition" })
+        k.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', { buffer = event.buf, desc = "Declaration" })
+        k.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { buffer = event.buf, desc = "Implementation" })
+        k.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', { buffer = event.buf, desc = "Type definition" })
+        k.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', { buffer = event.buf, desc = "References" })
+        k.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { buffer = event.buf, desc = "Hover" })
+        --
+        k.set('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>', { buffer = event.buf, desc = "Rename" })
+        k.set({ 'n', 'x' }, '<leader>cf', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', { buffer = event.buf, desc = "Format" })
+        k.set('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', { buffer = event.buf, desc = "Action" })
+    end
 })
 
 -- Terminal
@@ -89,9 +86,9 @@ vim.cmd("FloatermNew --name=floaterm2 --height=0.4 --width=0.4 --wintype=split -
 vim.cmd("FloatermNew --name=floaterm3 --height=1 --width=0.4 --wintype=vsplit --position=botright")
 vim.cmd("FloatermHide!")
 vim.cmd("stopinsert")
-k.set({'n', 't'}, '<A-1>', '<cmd>FloatermToggle floaterm1<cr>', {desc = "Open center terminal"})
-k.set({'n', 't'}, '<A-2>', '<cmd>FloatermToggle floaterm2<cr>', {desc = "Open center terminal"})
-k.set({'n', 't'}, '<A-3>', '<cmd>FloatermToggle floaterm3<cr>', {desc = "Open center terminal"})
+k.set({ 'n', 't' }, '<A-1>', '<cmd>FloatermToggle floaterm1<cr>', { desc = "Open center terminal" })
+k.set({ 'n', 't' }, '<A-2>', '<cmd>FloatermToggle floaterm2<cr>', { desc = "Open center terminal" })
+k.set({ 'n', 't' }, '<A-3>', '<cmd>FloatermToggle floaterm3<cr>', { desc = "Open center terminal" })
 
 -- vim.keymap.set('n', '<C-c>', '"+yi')
 k.set('v', '<C-c>', '"+yi')
