@@ -2,22 +2,22 @@
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 local lspconfig = require('lspconfig')
 
--- local default_setup = function(server)
---   lspconfig[server].setup({
---     capabilities = lsp_capabilities,
--- 	 on_attach = function(client, bufnr)
--- 		if client.server_capabilities.documentSymbolProvider then
--- 			navic.attach(client, bufnr)
--- 		end
---     end
---   })
--- end
+local default_setup = function(server)
+  lspconfig[server].setup({
+    capabilities = lsp_capabilities,
+	 -- on_attach = function(client, bufnr)
+	 -- if client.server_capabilities.documentSymbolProvider then
+	 -- 	-- navic.attach(client, bufnr)
+	 -- end
+    -- end
+  })
+end
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {},
   handlers = {
-    -- default_setup,
+    default_setup,
   },
 })
 
