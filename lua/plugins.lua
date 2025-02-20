@@ -42,8 +42,8 @@ return {
             require('dashboard').setup {
                 hide = {
                     statusline, -- hide statusline default is true
-                    tabline, -- hide the tabline
-                    winbar -- hide winbar
+                    tabline,    -- hide the tabline
+                    winbar      -- hide winbar
                 }
             }
         end,
@@ -158,7 +158,7 @@ return {
         },
         layout = {
             width = { min = 20 }, -- min and max width of the columns
-            spacing = 3, -- spacing between columns
+            spacing = 3,          -- spacing between columns
         },
         win = {
             no_overlap = true, -- don't allow the popup to overlap with the cursor
@@ -226,32 +226,6 @@ return {
         config = function()
             require('colorizer').setup({
                 '*',
-            })
-        end
-    },
-    {
-        "SmiteshP/nvim-navic",
-        dependencies = { "neovim/nvim-lspconfig" },
-        lazy = true,
-        event = "User FileOpened",
-        config = function()
-            local icons = require("config.icons")
-            require("nvim-navic").setup({
-                icons = icons.kind,
-                lsp = {
-                    auto_attach = true,
-                    preference = nil
-                },
-                highlight = false,
-                separator = " > ",
-                depth_limit = 0,
-                depth_limit_indicator = "..",
-                safe_output = true,
-                lazy_update_context = false,
-                click = false,
-                format_text = function(text)
-                    return text
-                end,
             })
         end
     },
@@ -392,5 +366,17 @@ return {
                 },
             })
         end
+    },
+    {
+        "utilyre/barbecue.nvim",
+        name = "barbecue",
+        version = "*",
+        dependencies = {
+            "SmiteshP/nvim-navic",
+            "nvim-tree/nvim-web-devicons", -- optional dependency
+        },
+        opts = {
+            -- configurations go here
+        },
     }
 }
