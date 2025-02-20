@@ -35,11 +35,9 @@ k.set("n", "<leader>to", "<cmd>bufdo bd<cr>", { desc = "Close all other buffers"
 
 k.set("n", "th", ":split<CR><C-w>w", { desc = "Horizontal split" })
 k.set("n", "tv", ":vsplit<CR><C-w>w", { desc = "Vertical split" })
-k.set("n", "tt", [[<cmd>tabnew<cr>]], { desc = "New tab" })
 k.set("n", "tc", [[<cmd>bd<cr>]], { desc = "Close tab" })
 k.set("n", "tn", [[<cmd>bnext<cr>]], { desc = "Next tab" })
 k.set("n", "tb", [[<cmd>bprev<cr>]], { desc = "Previous tab" })
-k.set("n", "te", "<cmd>tabnew<cr><cmd>Oil<cr>", { desc = "File explorer in new tab" })
 k.set("n", "to", "<cmd>bufdo bd<cr>", { desc = "Close all other tabs" })
 
 -- Movement
