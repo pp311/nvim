@@ -26,8 +26,13 @@ return {
         priority = 1000,
         lazy = false,
         config = function()
+            local is_transparent = true
+            if vim.g.neovide then
+                is_transparent = false
+            end
+
             require("catppuccin").setup({
-                transparent_background = true,
+                transparent_background = is_transparent,
                 no_italic = true,
                 flavor = "mocha"
             })
@@ -126,6 +131,12 @@ return {
                 registers = true
             }
         },
+        -- Delay before showing the popup. Can be a number or a function that returns a number.
+        ---@type number | fun(ctx: { keys: string, mode: string, plugin?: string }):number
+        -- delay = function(ctx)
+        --     return ctx.plugin and 0 or 200
+        -- end,
+        delay = 0,
         keys = {
             {
                 "<leader>f",
@@ -154,6 +165,13 @@ return {
                     require("which-key").show({ global = false })
                 end,
                 desc = "Code",
+            },
+            {
+                "<leader>x",
+                function()
+                    require("which-key").show({ global = false })
+                end,
+                desc = "Trouble",
             }
         },
         layout = {
@@ -326,12 +344,12 @@ return {
                     hide_during_completion = true,
                     debounce = 75,
                     keymap = {
-                        accept = "<M-l>",
+                        accept = "<C-l>",
                         accept_word = false,
                         accept_line = false,
                         next = "<M-]>",
                         prev = "<M-[>",
-                        dismiss = "<C-]>",
+                        dismiss = "<M-\\>",
                     },
                 },
                 filetypes = {
@@ -387,4 +405,280 @@ return {
             -- configurations go here
         },
     },
+    {
+        "folke/trouble.nvim",
+        opts = {}, -- for default options, refer to the configuration section for custom setup.
+        cmd = "Trouble",
+        keys = {
+            {
+                "<leader>xx",
+                "<cmd>Trouble diagnostics toggle<cr>",
+                desc = "Diagnostics (Trouble)",
+            },
+            {
+                "<leader>xb",
+                "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+                desc = "Buffer Diagnostics (Trouble)",
+            },
+            {
+                "<leader>xs",
+                "<cmd>Trouble symbols toggle focus=false<cr>",
+                desc = "Symbols (Trouble)",
+            },
+            {
+                "<leader>xd",
+                "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+                desc = "LSP Definitions / references / ... (Trouble)",
+            },
+            {
+                "<leader>xl",
+                "<cmd>Trouble loclist toggle<cr>",
+                desc = "Location List (Trouble)",
+            },
+            {
+                "<leader>xq",
+                "<cmd>Trouble qflist toggle<cr>",
+                desc = "Quickfix List (Trouble)",
+            },
+        },
+    },
+    {
+        "RRethy/vim-illuminate",
+        config = function()
+            require('illuminate').configure({
+                -- providers: provider used to get references in the buffer, ordered by priority
+                providers = {
+                    'lsp',
+                    'treesitter',
+                    'regex',
+                },
+                -- delay: delay in milliseconds
+                delay = 50,
+                -- filetype_overrides: filetype specific overrides.
+                -- The keys are strings to represent the filetype while the values are tables that
+                -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
+                filetype_overrides = {},
+                -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
+                filetypes_denylist = {
+                    'dirbuf',
+                    'dirvish',
+                    'fugitive',
+                },
+                -- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
+                -- You must set filetypes_denylist = {} to override the defaults to allow filetypes_allowlist to take effect
+                filetypes_allowlist = {},
+                -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
+                -- See `:help mode()` for possible values
+                modes_denylist = {},
+                -- modes_allowlist: modes to illuminate, this is overridden by modes_denylist
+                -- See `:help mode()` for possible values
+                modes_allowlist = {},
+                -- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
+                -- Only applies to the 'regex' provider
+                -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+                providers_regex_syntax_denylist = {},
+                -- providers_regex_syntax_allowlist: syntax to illuminate, this is overridden by providers_regex_syntax_denylist
+                -- Only applies to the 'regex' provider
+                -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+                providers_regex_syntax_allowlist = {},
+                -- under_cursor: whether or not to illuminate under the cursor
+                under_cursor = true,
+                -- large_file_cutoff: number of lines at which to use large_file_config
+                -- The `under_cursor` option is disabled when this cutoff is hit
+                large_file_cutoff = 10000,
+                -- large_file_config: config to use for large files (based on large_file_cutoff).
+                -- Supports the same keys passed to .configure
+                -- If nil, vim-illuminate will be disabled for large files.
+                large_file_overrides = nil,
+                -- min_count_to_highlight: minimum number of matches required to perform highlighting
+                min_count_to_highlight = 1,
+                -- should_enable: a callback that overrides all other settings to
+                -- enable/disable illumination. This will be called a lot so don't do
+                -- anything expensive in it.
+                -- should_enable = function(bufnr) return true end,
+                --
+                -- case_insensitive_regex: sets regex case sensitivity
+                case_insensitive_regex = false,
+                -- disable_keymaps: disable default keymaps
+                disable_keymaps = false,
+            })
+        end
+    },
+    {
+        "rachartier/tiny-inline-diagnostic.nvim",
+        event = "VeryLazy", -- Or `LspAttach`
+        priority = 1000,    -- needs to be loaded in first
+        config = function()
+            require('tiny-inline-diagnostic').setup({
+                preset = "powerline",
+                transparent_background = false,
+
+                hi = {
+                    error = "DiagnosticError", -- Highlight group for error messages
+                    warn = "DiagnosticWarn",   -- Highlight group for warning messages
+                    info = "DiagnosticInfo",   -- Highlight group for informational messages
+                    hint = "DiagnosticHint",   -- Highlight group for hint or suggestion messages
+                    arrow = "NonText",         -- Highlight group for diagnostic arrows
+
+                    -- Background color for diagnostics
+                    -- Can be a highlight group or a hexadecimal color (#RRGGBB)
+                    background = "CursorLine",
+
+                    -- Color blending option for the diagnostic background
+                    -- Use "None" or a hexadecimal color (#RRGGBB) to blend with another color
+                    mixing_color = "None",
+                },
+
+                options = {
+                    -- Display the source of the diagnostic (e.g., basedpyright, vsserver, lua_ls etc.)
+                    show_source = false,
+
+                    -- Use icons defined in the diagnostic configuration
+                    use_icons_from_diagnostic = false,
+
+                    -- Set the arrow icon to the same color as the first diagnostic severity
+                    set_arrow_to_diag_color = false,
+
+                    -- Add messages to diagnostics when multiline diagnostics are enabled
+                    -- If set to false, only signs will be displayed
+                    add_messages = true,
+
+                    -- Time (in milliseconds) to throttle updates while moving the cursor
+                    -- Increase this value for better performance if your computer is slow
+                    -- or set to 0 for immediate updates and better visual
+                    throttle = 20,
+
+                    -- Minimum message length before wrapping to a new line
+                    softwrap = 30,
+
+                    -- Configuration for multiline diagnostics
+                    -- Can either be a boolean or a table with the following options:
+                    --  multilines = {
+                    --      enabled = false,
+                    --      always_show = false,
+                    -- }
+                    -- If it set as true, it will enable the feature with this options:
+                    --  multilines = {
+                    --      enabled = true,
+                    --      always_show = false,
+                    -- }
+                    multilines = {
+                        -- Enable multiline diagnostic messages
+                        enabled = false,
+
+                        -- Always show messages on all lines for multiline diagnostics
+                        always_show = false,
+                    },
+
+                    -- Display all diagnostic messages on the cursor line
+                    show_all_diags_on_cursorline = false,
+
+                    -- Enable diagnostics in Insert mode
+                    -- If enabled, it is better to set the `throttle` option to 0 to avoid visual artifacts
+                    enable_on_insert = false,
+
+                    -- Enable diagnostics in Select mode (e.g when auto inserting with Blink)
+                    enable_on_select = false,
+
+                    overflow = {
+                        -- Manage how diagnostic messages handle overflow
+                        -- Options:
+                        -- "wrap" - Split long messages into multiple lines
+                        -- "none" - Do not truncate messages
+                        -- "oneline" - Keep the message on a single line, even if it's long
+                        mode = "wrap",
+
+                        -- Trigger wrapping to occur this many characters earlier when mode == "wrap".
+                        -- Increase this value appropriately if you notice that the last few characters
+                        -- of wrapped diagnostics are sometimes obscured.
+                        padding = 0,
+                    },
+
+                    -- Configuration for breaking long messages into separate lines
+                    break_line = {
+                        -- Enable the feature to break messages after a specific length
+                        enabled = false,
+
+                        -- Number of characters after which to break the line
+                        after = 30,
+                    },
+
+                    -- Custom format function for diagnostic messages
+                    -- Example:
+                    -- format = function(diagnostic)
+                    --     return diagnostic.message .. " [" .. diagnostic.source .. "]"
+                    -- end
+                    format = nil,
+
+
+                    virt_texts = {
+                        -- Priority for virtual text display
+                        priority = 2048,
+                    },
+
+                    -- Filter diagnostics by severity
+                    -- Available severities:
+                    -- vim.diagnostic.severity.ERROR
+                    -- vim.diagnostic.severity.WARN
+                    -- vim.diagnostic.severity.INFO
+                    -- vim.diagnostic.severity.HINT
+                    severity = {
+                        vim.diagnostic.severity.ERROR,
+                        vim.diagnostic.severity.WARN,
+                        vim.diagnostic.severity.INFO,
+                        vim.diagnostic.severity.HINT,
+                    },
+
+                    -- Events to attach diagnostics to buffers
+                    -- You should not change this unless the plugin does not work with your configuration
+                    overwrite_events = nil,
+                },
+                disabled_ft = {}                            -- List of filetypes to disable the plugin
+            })
+            vim.diagnostic.config({ virtual_text = false }) -- Only if needed in your configuration, if you already have native LSP diagnostics
+        end
+    },
+    {
+        'sethen/line-number-change-mode.nvim',
+        config = function()
+            require('catppuccin').setup({
+                flavour = 'mocha',
+            });
+            local palette = require('catppuccin.palettes').get_palette('mocha')
+
+            if (palette == nil) then
+                return nil
+            end
+
+            require("line-number-change-mode").setup({
+                mode = {
+                    i = {
+                        bg = palette.green,
+                        fg = palette.mantle,
+                        bold = true,
+                    },
+                    n = {
+                        bg = palette.blue,
+                        fg = palette.mantle,
+                        bold = true,
+                    },
+                    R = {
+                        bg = palette.maroon,
+                        fg = palette.mantle,
+                        bold = true,
+                    },
+                    v = {
+                        bg = palette.mauve,
+                        fg = palette.mantle,
+                        bold = true,
+                    },
+                    V = {
+                        bg = palette.mauve,
+                        fg = palette.mantle,
+                        bold = true,
+                    },
+                }
+            })
+        end
+    }
 }
